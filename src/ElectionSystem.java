@@ -20,11 +20,11 @@ public class ElectionSystem {
 
         int totalVotes = 5 + rand.nextInt(11); //between 5 and 15
 
-        System.out.println("🗳️  Candidates in the Election:");
+        System.out.println("  Candidates in the Election:");
         for (String c : selectedCandidates) {
             System.out.println(" - " + c);
         }
-        System.out.println("🔢 Total Votes Allowed: " + totalVotes);
+        System.out.println("Total Votes Allowed: " + totalVotes);
 
         election.initializeCandidates(selectedCandidates, totalVotes);
 
@@ -34,24 +34,24 @@ public class ElectionSystem {
 
         int topK = Math.min(3, selectedCandidates.size());
 
-        System.out.println("\n📊 Top " + topK + " Candidates After Voting:");
+        System.out.println("\n Top " + topK + " Candidates After Voting:");
         List<String> topBefore = election.getTopKCandidates(topK);
         for (String name : topBefore) {
             System.out.println(" - " + name);
         }
 
         String riggedWinner = selectedCandidates.get(rand.nextInt(selectedCandidates.size()));
-        System.out.println("\n⚙️  Rigging election for: " + riggedWinner);
+        System.out.println("\n   Rigging election for: " + riggedWinner);
         election.rigElection(riggedWinner);       // Rig election for a random candidate
 
 
-        System.out.println("\n📊 Top " + topK + " Candidates After Rigging:");
+        System.out.println("\n Top " + topK + " Candidates After Rigging:");
         List<String> topAfter = election.getTopKCandidates(topK);
         for (String name : topAfter) {
             System.out.println(" - " + name);
         }
 
-        System.out.println("\n📋 Final Audit Report:");
+        System.out.println("\n Final Audit Report:");
         election.auditElection();
     }
 }
