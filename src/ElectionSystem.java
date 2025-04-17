@@ -1,35 +1,57 @@
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ElectionSystem {
     public static void main(String[] args) {
         Election election = new Election();
+        Random rand = new Random();
 
-        LinkedList<String> candidates = new LinkedList<>();
-        candidates.add("Marcus Fenix");
-        candidates.add("Dominic Santiago");
-        candidates.add("Damon Baird");
-        candidates.add("Cole Train");
-        candidates.add("Anya Stroud");
+        String[] allCandidates = {
+                "Marcus Fenix", "Dominic Santiago", "Damon Baird",
+                "Cole Train", "Anya Stroud", "Jayden Cruz", "Peter Hoang",
+                "Chris Garcia", "Navi Bounto", "Kevin Gonzalez", "Ethan William"
+        };
 
-        int totalVotes = 5;
-        election.initializeCandidates(candidates, totalVotes);
+        int numCandidates = 3 + rand.nextInt(5); // 3 to 7 inclusive
+        LinkedList<String> selectedCandidates = new LinkedList<>();
 
-        election.castVote("Cole Train");
-        election.castVote("Cole Train");
-        election.castVote("Marcus Fenix");
-        election.castVote("Anya Stroud");
-        election.castVote("Anya Stroud");
-        election.castRandomVote();
+        List<String> pool = new ArrayList<>(Arrays.asList(allCandidates));
+        Collections.shuffle(pool);        // Shuffle and pick unique candidates
+        selectedCandidates.addAll(pool.subList(0, numCandidates));
 
-        List<String> top3BeforeRig = election.getTopKCandidates(3);
-        System.out.println("Top 3 candidates after 5 votes: " + top3BeforeRig);
+        int totalVotes = 5 + rand.nextInt(11); //between 5 and 15
 
-        election.rigElection("Marcus Fenix");
+        System.out.println("🗳️  Candidates in the Election:");
+        for (String c : selectedCandidates) {
+            System.out.println(" - " + c);
+        }
+        System.out.println("🔢 Total Votes Allowed: " + totalVotes);
 
-        List<String> top3AfterRig = election.getTopKCandidates(3);
-        System.out.println("Top 3 candidates after rigging the election: " + top3AfterRig);
+        election.initializeCandidates(selectedCandidates, totalVotes);
 
+        for (int i = 0; i < totalVotes; i++) {
+            election.castRandomVote();
+        }
+
+        int topK = Math.min(3, selectedCandidates.size());
+
+        System.out.println("\n📊 Top " + topK + " Candidates After Voting:");
+        List<String> topBefore = election.getTopKCandidates(topK);
+        for (String name : topBefore) {
+            System.out.println(" - " + name);
+        }
+
+        String riggedWinner = selectedCandidates.get(rand.nextInt(selectedCandidates.size()));
+        System.out.println("\n⚙️  Rigging election for: " + riggedWinner);
+        election.rigElection(riggedWinner);       // Rig election for a random candidate
+
+
+        System.out.println("\n📊 Top " + topK + " Candidates After Rigging:");
+        List<String> topAfter = election.getTopKCandidates(topK);
+        for (String name : topAfter) {
+            System.out.println(" - " + name);
+        }
+
+        System.out.println("\n📋 Final Audit Report:");
         election.auditElection();
     }
 }
